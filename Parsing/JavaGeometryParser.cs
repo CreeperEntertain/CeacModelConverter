@@ -38,7 +38,12 @@ namespace CeacModelConverter.Parsing
             foreach (Match faceMatch in faceMatches)
             {
                 string faceTypeName = faceMatch.Groups[1].Value;
-                int openingParenthesis = source.IndexOf('(', faceMatch.Index + faceMatch.Length - 1);
+                int openingParenthesis = source.IndexOf(
+                    '(',
+                    faceMatch.Index + faceMatch.Length - 1
+                );
+                if (openingParenthesis < 0)
+                    throw new FormatException($"Could not find opening parenthesis for {faceTypeName} at character {faceMatch.Index}.");
                 int closingParenthesis = FindMatchingParenthesis(source, openingParenthesis);
                 string faceBody = source.Substring(
                     openingParenthesis + 1,
@@ -177,6 +182,9 @@ namespace CeacModelConverter.Parsing
             int openingIndex
         )
         {
+            if (openingIndex < 0 || openingIndex >= text.Length)
+                throw new FormatException($"Invalid opening parenthesis index: {openingIndex}.");
+
             int depth = 0;
 
             for (int i = openingIndex; i < text.Length; i++)

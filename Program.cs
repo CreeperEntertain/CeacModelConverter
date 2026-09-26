@@ -54,7 +54,7 @@ namespace CeacModelConverter
             {
                 Console.WriteLine();
                 Console.WriteLine("Conversion failed:");
-                Console.WriteLine(exception.Message);
+                Console.WriteLine(exception);
             }
 
             if (args.Length == 0)
