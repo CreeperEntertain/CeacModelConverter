@@ -9,18 +9,26 @@ namespace CeacModelConverter
             Console.WriteLine("CEAC Model Converter");
             Console.WriteLine("Java Geometry <-> OBJ\n");
 
-            string inputPath;
-
             if (args.Length > 0)
-                inputPath = args[0];
-            else
             {
-                Console.WriteLine("Drag a Java geometry class or OBJ file into this console and press Enter.");
-                Console.Write("File: ");
-
-                inputPath = Console.ReadLine() ?? String.Empty;
+                foreach (string input in args)
+                    ConvertFile(input);
+                return;
             }
 
+            Console.WriteLine("Drag a Java geometry class or OBJ file into this console and press Enter.");
+            Console.Write("File: ");
+
+            string inputPath = Console.ReadLine() ?? String.Empty;
+            ConvertFile(inputPath);
+
+            Console.WriteLine();
+            Console.WriteLine("Press Enter to close.");
+            Console.ReadLine();
+        }
+
+        private static void ConvertFile(string inputPath)
+        {
             inputPath = CleanDraggedPath(inputPath);
 
             if (string.IsNullOrWhiteSpace(inputPath))
@@ -31,6 +39,7 @@ namespace CeacModelConverter
             if (!File.Exists(inputPath))
             {
                 Console.WriteLine($"File not found: {inputPath}");
+                return;
             }
 
             string extension = Path.GetExtension(inputPath);
@@ -51,26 +60,20 @@ namespace CeacModelConverter
                 }
                 else
                 {
-                    Console.WriteLine("The input file must be a .java or .obj file.");
+                    Console.WriteLine($"Unsupported file type: {Path.GetFileName(inputPath)}");
                     return;
                 }
 
-                Console.WriteLine();
                 Console.WriteLine($"Created: {outputPath}");
             }
             catch (Exception exception)
             {
                 Console.WriteLine();
-                Console.WriteLine("Conversion failed:");
+                Console.WriteLine($"Conversion failed for: {inputPath}");
                 Console.WriteLine(exception);
             }
 
-            if (args.Length == 0)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Press Enter to close.");
-                Console.ReadLine();
-            }
+            Console.WriteLine();
         }
 
         private static string CleanDraggedPath(string input)
