@@ -7,7 +7,7 @@ namespace CeacModelConverter
         static void Main(string[] args)
         {
             Console.WriteLine("CEAC Model Converter");
-            Console.WriteLine("Java Geometry -> OBJ\n");
+            Console.WriteLine("Java Geometry <-> OBJ\n");
 
             string inputPath;
 
@@ -15,7 +15,7 @@ namespace CeacModelConverter
                 inputPath = args[0];
             else
             {
-                Console.WriteLine("Drag a Java geometry class into this console and press Enter.");
+                Console.WriteLine("Drag a Java geometry class or OBJ file into this console and press Enter.");
                 Console.Write("File: ");
 
                 inputPath = Console.ReadLine() ?? String.Empty;
@@ -35,17 +35,25 @@ namespace CeacModelConverter
 
             string extension = Path.GetExtension(inputPath);
 
-            if (!extension.Equals(".java", StringComparison.OrdinalIgnoreCase))
-            {
-                Console.WriteLine("The input file must be a .java file.");
-                return;
-            }
-
             try
             {
-                var converter = new JavaToObjConverter();
+                string outputPath;
 
-                string outputPath = converter.ConvertFile(inputPath);
+                if (extension.Equals(".java", StringComparison.OrdinalIgnoreCase))
+                {
+                    var converter = new JavaToObjConverter();
+                    outputPath = converter.ConvertFile(inputPath);
+                }
+                else if (extension.Equals(".obj", StringComparison.OrdinalIgnoreCase))
+                {
+                    var converter = new ObjToJavaConverter();
+                    outputPath = converter.ConvertFile(inputPath);
+                }
+                else
+                {
+                    Console.WriteLine("The input file must be a .java or .obj file.");
+                    return;
+                }
 
                 Console.WriteLine();
                 Console.WriteLine($"Created: {outputPath}");
