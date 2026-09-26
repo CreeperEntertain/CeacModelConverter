@@ -8,9 +8,9 @@ namespace CeacModelConverter.Coordinates
         public static Vector3 JavaToObj(GeometryVertex vertex)
         {
             return new Vector3(
-                (float)vertex.X,
-                (float)-vertex.Z,
-                (float)vertex.Y
+                (float)(vertex.X - 0.5),
+                (float)(-(vertex.Z - 0.5)),
+                (float)(vertex.Y - 0.5)
             );
         }
     }
