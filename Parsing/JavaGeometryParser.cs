@@ -164,7 +164,7 @@ namespace CeacModelConverter.Parsing
             string beforeBuilder = source.Substring(0, lineStart);
             string[] lines = beforeBuilder.Split('\n');
 
-            for (int i = lines.Length - 1; i >= 0; i++)
+            for (int i = lines.Length - 1; i >= 0; i--)
             {
                 string line = lines[i].Trim();
                 if (string.IsNullOrWhiteSpace(line))
